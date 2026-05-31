@@ -1,12 +1,12 @@
 # People Counting with YOLO26x + Count-Zone Pairs
 
-This project detects people across the full frame with YOLO26x, tracks them with a custom OC-SORT-style motion tracker, then counts each tracked person once when their bottom-center point moves across a count-zone pair such as `area1` to `area2`, or `area3` to `area4`.
+This project detects people across the full frame with YOLO26x, tracks them with a custom OC-SORT-style motion tracker, then counts each tracked person once when their bottom-center point moves across a count-zone pair. The default `count_zones.json` uses `area1` and `area2`; the code also supports an optional second pair, `area3` and `area4`.
 
 It does not use `YOLO.track()`, and it does not split enter/exit counts. Both directions are combined into one total.
 
 ## 1. Draw Count Zones
 
-Draw editable polygon pairs around entrance/exit floor areas. `area1/area2` is the first entrance, and `area3/area4` is the second entrance. You can also draw first/final-frame ignore boxes in the same tool.
+Draw editable polygon pairs around entrance/exit floor areas. `area1/area2` is the first entrance pair. If needed, `area3/area4` can be added as a second entrance pair. You can also draw first/final-frame ignore boxes in the same tool.
 
 ```powershell
 python select_count_zones.py
@@ -15,12 +15,12 @@ python select_count_zones.py
 Controls:
 
 - `z`: edit count zones
-- `i`: edit final-frame ignore boxes
-- Click 4 points: create one area polygon. Create zones in pairs: `area1/area2`, then `area3/area4`.
-- Drag with the mouse in ignore mode: create one final ignore box
+- `i`: edit first/final-frame ignore boxes
+- Click 4 points: create one area polygon. Create zones in complete pairs: `area1/area2`, optionally then `area3/area4`.
+- Drag with the mouse in ignore mode: create one ignore box
 - Drag a corner: edit that corner
 - Drag inside an area or ignore box: move it
-- `s`: save to `count_zones.json`
+- `s`: save to `count_zones.json` when the count zones are complete pairs, either 2 zones or 4 zones
 - `u`: undo last point, last area, or last ignore box in the current mode
 - `c`: clear the current mode
 - `q` or `Esc`: quit without saving
@@ -50,9 +50,9 @@ The script automatically loads `count_zones.json`, including ignore boxes drawn 
 - Tracking point: the bottom-center of the person box is treated as the foot point.
 - First frame flush: on the first processed frame, any visible active `track_id` is added to the total once. By default this needs only 1 seen frame, controlled by `--first-count-min-track-frames`.
 - First area touch: when a new `track_id` first steps into one area of a pair, that first area is stored for that pair.
-- Count event: if the same `track_id` later steps into the other area of the same pair, total count increases by 1. Supported pairs are `area1/area2` and `area3/area4`.
+- Count event: if the same `track_id` later steps into the other area of the same pair, total count increases by 1. The code supports up to two pairs: `area1/area2` and optional `area3/area4`.
 - Final frame flush: on the last processed frame, any still-visible active `track_id` that has not been counted yet is added to the total once. By default this needs only 1 seen frame, controlled by `--final-count-min-track-frames`.
-- First/final ignore boxes: `--final-ignore-box` skips selected areas only during the first-frame and final-frame flushes. It does not affect detection, tracking, or normal area crossing counts during the video.
+- First/final ignore boxes: boxes saved in `count_zones.json`, or passed with `--final-ignore-box`, skip selected areas only during the first-frame and final-frame flushes. They do not affect detection, tracking, or normal area-crossing counts during the video.
 - No double count: once a `track_id` has been counted, it will not be counted again even if it walks back and forth while still using the same ID.
 
 In the output video, boxes and labels are drawn for every active track. A track that just increases the count is highlighted in red for `--count-highlight-frames` frames.
@@ -93,6 +93,7 @@ To reduce ID swaps near frame edges, the tracker uses three guards:
 You can pass zones directly if needed:
 
 ```powershell
+python people_count.py --device 0 --half --zone "100,700;450,700;450,850;100,850" --zone "500,700;850,700;850,850;500,850"
 python people_count.py --device 0 --half --zone "100,700;450,700;450,850;100,850" --zone "500,700;850,700;850,850;500,850" --zone "900,700;1200,700;1200,850;900,850" --zone "1250,700;1550,700;1550,850;1250,850"
 ```
 
