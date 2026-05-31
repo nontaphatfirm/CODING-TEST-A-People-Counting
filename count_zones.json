@@ -1,0 +1,59 @@
+{
+  "source": "Dataset\\entrance.mov",
+  "frame_index": 1278,
+  "image_width": 1920,
+  "image_height": 1080,
+  "count_zones": [
+    {
+      "name": "area1",
+      "points": [
+        {
+          "x": 516,
+          "y": 718
+        },
+        {
+          "x": 722,
+          "y": 674
+        },
+        {
+          "x": 873,
+          "y": 720
+        },
+        {
+          "x": 524,
+          "y": 830
+        }
+      ]
+    },
+    {
+      "name": "area2",
+      "points": [
+        {
+          "x": 927,
+          "y": 698
+        },
+        {
+          "x": 412,
+          "y": 868
+        },
+        {
+          "x": 468,
+          "y": 951
+        },
+        {
+          "x": 1068,
+          "y": 720
+        }
+      ]
+    }
+  ],
+  "final_ignore_boxes": [
+    {
+      "name": "final_ignore1",
+      "x1": 464,
+      "y1": 114,
+      "x2": 840,
+      "y2": 754
+    }
+  ]
+}

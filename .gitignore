@@ -1,0 +1,9 @@
+outputs/
+Dataset/
+.ultralytics/
+Ultralytics/
+__pycache__/
+*.pt
+*.onnx
+*.engine
+*.avi
