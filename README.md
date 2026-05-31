@@ -4,13 +4,6 @@ This project detects people across the full frame with YOLO26x, tracks them with
 
 It does not use `YOLO.track()`, and it does not split enter/exit counts. Both directions are combined into one total.
 
-## Example Output
-
-<img width="400" height="225" alt="Image" src="https://github.com/user-attachments/assets/b9b803fb-5f6b-4783-8c7b-40de21b49702" />
-
-Example videos and outputs are available here:
-[Google Drive](https://drive.google.com/drive/folders/1wVp1hyQ32HqWtjtTUoGl_ooOD9ztDHFp)
-
 ## 1. Draw Count Zones
 
 Draw editable polygon pairs around entrance/exit floor areas. `area1/area2` is the first entrance pair. If needed, `area3/area4` can be added as a second entrance pair. You can also draw first/final-frame ignore boxes in the same tool.
